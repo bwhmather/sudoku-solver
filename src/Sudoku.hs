@@ -29,7 +29,7 @@ instance Ix Coord where
 
 ---------------------------------------------------------------------- 
 
-type size = Int
+type Size = Int
 
 newtype Grid c = Grid (Array Coord c)
 
@@ -46,7 +46,7 @@ cell (Grid a) = (!) a
 
 -- | Return a list of the coordinates of all cells in a grid of the given size
 cells :: Size -> [Coord]
-cells size r = range (Coord 0 0, Coord (size*size-1) (size*size-1))
+cells size = range (Coord 0 0, Coord (size*size-1) (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested row
 row :: Size -> Int -> [Coord]
@@ -59,4 +59,4 @@ col size c = range (Coord 0 c, Coord (size*size-1) c)
 -- | Return a list of all of the coordinates in the requested box
 box :: Size -> (Int, Int) -> [Coord]
 box size (r, c)
-    = range (Coord (size*r) (size*c), Coord (size*r+size) (size*c+size))
+    = range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
