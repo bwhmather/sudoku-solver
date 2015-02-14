@@ -1,16 +1,15 @@
-import Test.Framework (defaultMain, testGroup)
--- import Test.Framework.Providers.HUnit
+import Test.Framework (Test, defaultMain, testGroup)
 import Test.Framework.Providers.QuickCheck2 (testProperty)
 
-import Test.QuickCheck
-import Test.QuickCheck.Gen (choose)
--- import Test.HUnit
+import Test.QuickCheck (Property, forAll, choose)
 
 import Sudoku
-import Data.List
 
+
+main :: IO()
 main = defaultMain tests
 
+tests :: [Test]
 tests =
     [ testGroup "Coordinate tests"
         [ testProperty "row length" prop_RowLength
@@ -22,10 +21,13 @@ tests =
         ]
     ]
 
+prop_RowLength :: Property
 prop_RowLength = forAll (choose (0, 8)) $ \r -> (length $ row 3 r) == 9
 
+prop_ColLength :: Property
 prop_ColLength = forAll (choose (0, 8)) $ \c -> (length $ col 3 c) == 9
 
+prop_BoxLength :: Property
 prop_BoxLength =
     forAll (choose (0, 2)) $ \r ->
     forAll (choose (0, 2)) $ \c ->
