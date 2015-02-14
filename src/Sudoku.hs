@@ -1,7 +1,7 @@
 module Sudoku where
 
-import Data.Ix
-import Data.Array (Array, (!), array, elems)
+import Data.Ix (Ix, range, index, inRange, rangeSize)
+import Data.Array (Array, (!), array)
 
 ---------------------------------------------------------------------- 
 
