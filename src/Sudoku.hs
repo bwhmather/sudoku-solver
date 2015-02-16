@@ -3,23 +3,23 @@ module Sudoku where
 import Data.Ix (Ix, range, index, inRange, rangeSize)
 import Data.Array (Array, (!), array)
 
----------------------------------------------------------------------- 
+----------------------------------------------------------------------
 
 data Coord = Coord Int Int
     deriving (Eq, Ord, Show)
 
 instance Ix Coord where
-    {-# INLINE range #-} 
+    {-# INLINE range #-}
     range (Coord r1 c1, Coord r2 c2)
         = [ Coord r c | r <- range (r1, r2)
                       , c <- range (c1, c2) ]
 
-    {-# INLINE index #-} 
+    {-# INLINE index #-}
     index (Coord top left, Coord bottom right) (Coord r c)
         = index (top, bottom) r * rangeSize (left, right)
         + index (left, right) c
 
-    {-# INLINE inRange #-} 
+    {-# INLINE inRange #-}
     inRange (Coord top left, Coord bottom right) (Coord r c)
         = inRange (top, bottom) r && inRange (left, right) c
 
@@ -27,7 +27,7 @@ instance Ix Coord where
     rangeSize (Coord top left, Coord bottom right)
         = rangeSize(top, bottom) * rangeSize(left, right)
 
----------------------------------------------------------------------- 
+----------------------------------------------------------------------
 
 newtype Grid c = Grid (Array Coord c)
 
