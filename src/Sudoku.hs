@@ -1,7 +1,12 @@
 module Sudoku where
 
+import Data.Maybe (catMaybes)
+
 import Data.Ix (Ix, range, index, inRange, rangeSize)
 import Data.Array (Array, (!), array)
+
+import qualified Data.Set as Set
+import Data.Set (Set)
 
 ----------------------------------------------------------------------
 
@@ -77,3 +82,38 @@ colCoords c = range (Coord 0 c, Coord (size*size-1) c)
 boxCoords :: (Int, Int) -> [Coord]
 boxCoords (r, c) =
     range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
+
+
+----------------------------------------------------------------------
+
+allValues :: Set Int
+allValues = Set.fromList [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+-- | Returns a list of all groups of coordinates containing the target
+-- TODO better name
+cellGroups :: Coord -> [[Coord]]
+cellGroups target =
+    [ rowCoords (row target)
+    , colCoords (col target)
+    , boxCoords (box target)
+    ]
+
+-- | A list of of all groups containing the target but filtered so that the
+-- | target is not included
+-- TODO better name
+cellGroupsWithoutCell :: Coord -> [[Coord]]
+cellGroupsWithoutCell target =
+    map (filter  (\c -> not $ c == target)) $ cellGroups target
+
+-- TODO better name
+otherCellsInGroups :: Grid (Maybe Int) -> Coord -> [Set Int]
+otherCellsInGroups grid =
+    map (Set.fromList . catMaybes . map (cell grid)) . cellGroupsWithoutCell
+
+-- TODO might be better as union then difference
+-- TODO point free
+possibleValues :: Grid (Maybe Int) -> Coord -> Set Int
+possibleValues grid target
+    = (foldr Set.intersection Set.empty)
+    $ (map (Set.difference allValues))
+    $ otherCellsInGroups grid target
