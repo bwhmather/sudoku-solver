@@ -31,4 +31,4 @@ prop_BoxLength :: Property
 prop_BoxLength =
     forAll (choose (0, 2)) $ \r ->
     forAll (choose (0, 2)) $ \c ->
-    (length $ boxCoords (r, c)) == 9
+    (length $ boxCoords (Box r c)) == 9

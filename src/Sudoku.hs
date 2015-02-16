@@ -13,7 +13,11 @@ import Data.Set (Set)
 
 ----------------------------------------------------------------------
 
-data Coord = Coord Value Value
+type Row = Int
+type Col = Int
+data Box = Box Int Int
+
+data Coord = Coord Row Col
     deriving (Eq, Ord, Show)
 
 instance Ix Coord where
@@ -69,8 +73,8 @@ col (Coord _ c) = c
 
 -- | Get an tuple representing the row and column of the box containing the
 -- cell given by a coordinate
-box :: Coord -> (Int, Int)
-box (Coord r c) = (quot r 3, quot c 3)
+box :: Coord -> Box
+box (Coord r c) = Box (quot r 3) (quot c 3)
 
 ----------------------------------------------------------------------
 
@@ -79,16 +83,16 @@ cellCoords :: [Coord]
 cellCoords = range (Coord 0 0, Coord (size*size-1) (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested row
-rowCoords :: Int -> [Coord]
+rowCoords :: Row -> [Coord]
 rowCoords r = range (Coord r 0, Coord r (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested column
-colCoords :: Int -> [Coord]
+colCoords :: Col -> [Coord]
 colCoords c = range (Coord 0 c, Coord (size*size-1) c)
 
 -- | Return a list of all of the coordinates in the requested box
-boxCoords :: (Int, Int) -> [Coord]
-boxCoords (r, c) =
+boxCoords :: Box -> [Coord]
+boxCoords (Box r c) =
     range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
 
 
