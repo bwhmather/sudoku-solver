@@ -2,6 +2,8 @@ module Sudoku where
 
 import Data.Maybe (isNothing, catMaybes)
 
+import Data.List (sortBy)
+
 import Data.Ix (Ix, range, index, inRange, rangeSize)
 import Data.Array (Array, (!), array)
 
@@ -118,7 +120,13 @@ possibleValues grid target
     $ (map (Set.difference allValues))
     $ otherCellsInGroups grid target
 
-
 -- | List of the coordinates of all cells in a grid that have no value set
 unsetCells :: Grid (Maybe Int) -> [Coord]
 unsetCells grid = filter (isNothing . cell grid) cellCoords
+
+-- | mapping from unset cells to sets of possible values sorted in increasing
+-- | order by their number
+candidates :: Grid (Maybe Int) -> [(Coord, Set Int)]
+candidates grid =
+    sortBy (\ (_, vs1) (_, vs2) -> compare (Set.size vs1) (Set.size vs2))
+           [(coord, possibleValues grid coord) | coord <- unsetCells grid]
