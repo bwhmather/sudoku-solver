@@ -37,8 +37,8 @@ size = 3
 bounds :: (Coord, Coord)
 bounds = (Coord 0 0, Coord (size*size-1) (size*size-1))
 
-empty :: Grid c
-empty = Grid $ array (Coord 0 0, Coord (size*size-1) (size*size-1)) []
+empty :: Grid (Maybe Int)
+empty = Grid $ array bounds (map (\ c -> (c, Nothing)) $ range bounds)
 
 -- | Get the value of the grid cell at c
 cell :: Grid c -> Coord -> c
