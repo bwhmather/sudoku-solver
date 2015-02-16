@@ -135,3 +135,9 @@ candidates :: Grid (Maybe Int) -> [(Coord, Set Int)]
 candidates grid =
     sortBy (\ (_, vs1) (_, vs2) -> compare (Set.size vs1) (Set.size vs2))
            [(coord, possibleValues grid coord) | coord <- unsetCells grid]
+
+solve' :: Grid (Maybe Int) -> [Grid (Maybe Int)]
+solve' grid = case candidates grid of
+    (c, values) : _ ->
+        concat . map (solve' . (setCell grid c) . Just) $ Set.toList values
+    [] -> [grid]
