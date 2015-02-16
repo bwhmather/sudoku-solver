@@ -42,7 +42,9 @@ instance Ix Coord where
 ----------------------------------------------------------------------
 
 type Value = Int
+
 newtype Grid c = Grid (Array Coord c)
+    deriving (Eq, Show)
 
 size :: Int
 size = 3
