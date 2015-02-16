@@ -44,6 +44,23 @@ empty = Grid $ array (Coord 0 0, Coord (size*size-1) (size*size-1)) []
 cell :: Grid c -> Coord -> c
 cell (Grid a) = (!) a
 
+----------------------------------------------------------------------
+
+-- | Get the row of the cell at a coordinate
+row :: Coord -> Int
+row (Coord r _) = r
+
+-- | Get the column of the cell at a coordinate
+col :: Coord -> Int
+col (Coord _ c) = c
+
+-- | Get an tuple representing the row and column of the box containing the
+-- cell given by a coordinate
+box :: Coord -> (Int, Int)
+box (Coord r c) = (quot r 3, quot c 3)
+
+----------------------------------------------------------------------
+
 -- | Return a list of the coordinates of all cells in a grid of the given size
 cellCoords :: [Coord]
 cellCoords = range (Coord 0 0, Coord (size*size-1) (size*size-1))
