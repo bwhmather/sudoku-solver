@@ -1,6 +1,6 @@
 module Sudoku where
 
-import Data.Maybe (catMaybes)
+import Data.Maybe (isNothing, catMaybes)
 
 import Data.Ix (Ix, range, index, inRange, rangeSize)
 import Data.Array (Array, (!), array)
@@ -117,3 +117,8 @@ possibleValues grid target
     = (foldr Set.intersection Set.empty)
     $ (map (Set.difference allValues))
     $ otherCellsInGroups grid target
+
+
+-- | List of the coordinates of all cells in a grid that have no value set
+unsetCells :: Grid (Maybe Int) -> [Coord]
+unsetCells grid = filter (isNothing . cell grid) cellCoords
