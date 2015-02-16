@@ -29,34 +29,34 @@ instance Ix Coord where
 
 ---------------------------------------------------------------------- 
 
-type Size = Int
-
 newtype Grid c = Grid (Array Coord c)
 
-type InputGrid = Grid (Maybe Int)
-type OutputGrid = Grid (Int)
+size :: Int
+size = 3
 
+bounds :: (Coord, Coord)
+bounds = (Coord 0 0, Coord (size*size-1) (size*size-1))
 
-empty :: Size -> Grid c
-empty size = Grid $ array (Coord 0 0, Coord (size*size-1) (size*size-1)) []
+empty :: Grid c
+empty = Grid $ array (Coord 0 0, Coord (size*size-1) (size*size-1)) []
 
 -- | Get the value of the grid cell at c
 cell :: Grid c -> Coord -> c
 cell (Grid a) = (!) a
 
 -- | Return a list of the coordinates of all cells in a grid of the given size
-cells :: Size -> [Coord]
-cells size = range (Coord 0 0, Coord (size*size-1) (size*size-1))
+cells :: [Coord]
+cells = range (Coord 0 0, Coord (size*size-1) (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested row
-row :: Size -> Int -> [Coord]
-row size r = range (Coord r 0, Coord r (size*size-1))
+row :: Int -> [Coord]
+row r = range (Coord r 0, Coord r (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested column
-col :: Size -> Int -> [Coord]
-col size c = range (Coord 0 c, Coord (size*size-1) c)
+col :: Int -> [Coord]
+col c = range (Coord 0 c, Coord (size*size-1) c)
 
 -- | Return a list of all of the coordinates in the requested box
-box :: Size -> (Int, Int) -> [Coord]
-box size (r, c)
-    = range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
+box :: (Int, Int) -> [Coord]
+box (r, c) =
+    range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))

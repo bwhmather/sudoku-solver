@@ -22,13 +22,13 @@ tests =
     ]
 
 prop_RowLength :: Property
-prop_RowLength = forAll (choose (0, 8)) $ \r -> (length $ row 3 r) == 9
+prop_RowLength = forAll (choose (0, 8)) $ \r -> (length $ row r) == 9
 
 prop_ColLength :: Property
-prop_ColLength = forAll (choose (0, 8)) $ \c -> (length $ col 3 c) == 9
+prop_ColLength = forAll (choose (0, 8)) $ \c -> (length $ col c) == 9
 
 prop_BoxLength :: Property
 prop_BoxLength =
     forAll (choose (0, 2)) $ \r ->
     forAll (choose (0, 2)) $ \c ->
-    (length $ box 3 (r, c)) == 9
+    (length $ box (r, c)) == 9
