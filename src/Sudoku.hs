@@ -45,18 +45,18 @@ cell :: Grid c -> Coord -> c
 cell (Grid a) = (!) a
 
 -- | Return a list of the coordinates of all cells in a grid of the given size
-cells :: [Coord]
-cells = range (Coord 0 0, Coord (size*size-1) (size*size-1))
+cellCoords :: [Coord]
+cellCoords = range (Coord 0 0, Coord (size*size-1) (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested row
-row :: Int -> [Coord]
-row r = range (Coord r 0, Coord r (size*size-1))
+rowCoords :: Int -> [Coord]
+rowCoords r = range (Coord r 0, Coord r (size*size-1))
 
 -- | Return the coordinates of all of the cells in the requested column
-col :: Int -> [Coord]
-col c = range (Coord 0 c, Coord (size*size-1) c)
+colCoords :: Int -> [Coord]
+colCoords c = range (Coord 0 c, Coord (size*size-1) c)
 
 -- | Return a list of all of the coordinates in the requested box
-box :: (Int, Int) -> [Coord]
-box (r, c) =
+boxCoords :: (Int, Int) -> [Coord]
+boxCoords (r, c) =
     range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
