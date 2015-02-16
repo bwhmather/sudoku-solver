@@ -5,6 +5,7 @@ import Data.Maybe (isNothing, catMaybes)
 import Data.List (sortBy)
 
 import Data.Ix (Ix, range, index, inRange, rangeSize)
+import qualified Data.Array as Array
 import Data.Array (Array, (!), array)
 
 import qualified Data.Set as Set
@@ -50,6 +51,10 @@ empty = Grid $ array bounds (map (\ c -> (c, Nothing)) $ range bounds)
 -- | Get the value of the grid cell at c
 cell :: Grid c -> Coord -> c
 cell (Grid a) = (!) a
+
+-- | Create a copy of a grid with one cell updated
+setCell :: Grid c -> Coord -> c -> Grid c
+setCell (Grid a) coord value = Grid $ (Array.//) a [(coord, value)]
 
 ----------------------------------------------------------------------
 
