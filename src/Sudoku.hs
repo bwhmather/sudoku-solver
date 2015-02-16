@@ -13,7 +13,7 @@ import Data.Set (Set)
 
 ----------------------------------------------------------------------
 
-data Coord = Coord Int Int
+data Coord = Coord Value Value
     deriving (Eq, Ord, Show)
 
 instance Ix Coord where
@@ -37,6 +37,7 @@ instance Ix Coord where
 
 ----------------------------------------------------------------------
 
+type Value = Int
 newtype Grid c = Grid (Array Coord c)
 
 size :: Int
@@ -45,7 +46,7 @@ size = 3
 bounds :: (Coord, Coord)
 bounds = (Coord 0 0, Coord (size*size-1) (size*size-1))
 
-empty :: Grid (Maybe Int)
+empty :: Grid (Maybe Value)
 empty = Grid $ array bounds (map (\ c -> (c, Nothing)) $ range bounds)
 
 -- | Get the value of the grid cell at c
@@ -93,7 +94,7 @@ boxCoords (r, c) =
 
 ----------------------------------------------------------------------
 
-allValues :: Set Int
+allValues :: Set Value
 allValues = Set.fromList [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 -- | Returns a list of all groups of coordinates containing the target
@@ -113,30 +114,30 @@ cellGroupsWithoutCell target =
     map (filter  (\c -> not $ c == target)) $ cellGroups target
 
 -- TODO better name
-otherCellsInGroups :: Grid (Maybe Int) -> Coord -> [Set Int]
+otherCellsInGroups :: Grid (Maybe Value) -> Coord -> [Set Value]
 otherCellsInGroups grid =
     map (Set.fromList . catMaybes . map (cell grid)) . cellGroupsWithoutCell
 
 -- TODO might be better as union then difference
 -- TODO point free
-possibleValues :: Grid (Maybe Int) -> Coord -> Set Int
+possibleValues :: Grid (Maybe Value) -> Coord -> Set Value
 possibleValues grid target
     = (foldr Set.intersection Set.empty)
     $ (map (Set.difference allValues))
     $ otherCellsInGroups grid target
 
 -- | List of the coordinates of all cells in a grid that have no value set
-unsetCells :: Grid (Maybe Int) -> [Coord]
+unsetCells :: Grid (Maybe Value) -> [Coord]
 unsetCells grid = filter (isNothing . cell grid) cellCoords
 
 -- | mapping from unset cells to sets of possible values sorted in increasing
 -- | order by their number
-candidates :: Grid (Maybe Int) -> [(Coord, Set Int)]
+candidates :: Grid (Maybe Value) -> [(Coord, Set Value)]
 candidates grid =
     sortBy (\ (_, vs1) (_, vs2) -> compare (Set.size vs1) (Set.size vs2))
            [(coord, possibleValues grid coord) | coord <- unsetCells grid]
 
-solve' :: Grid (Maybe Int) -> [Grid (Maybe Int)]
+solve' :: Grid (Maybe Value) -> [Grid (Maybe Value)]
 solve' grid = case candidates grid of
     (c, values) : _ ->
         concat . map (solve' . (setCell grid c) . Just) $ Set.toList values
