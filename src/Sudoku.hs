@@ -112,12 +112,16 @@ cellGroups target =
     , boxCoords (box target)
     ]
 
+-- | return all items in a list not equal to the first argument
+allBut :: (Eq a) => a -> [a] -> [a]
+allBut target = filter (not . (==) target)
+
 -- | A list of of all groups containing the target but filtered so that the
 -- | target is not included
 -- TODO better name
 cellGroupsWithoutCell :: Coord -> [[Coord]]
 cellGroupsWithoutCell target =
-    map (filter  (\c -> not $ c == target)) $ cellGroups target
+    map (allBut target) $ cellGroups target
 
 -- TODO better name
 otherCellsInGroups :: Grid (Maybe Value) -> Coord -> [Set Value]
