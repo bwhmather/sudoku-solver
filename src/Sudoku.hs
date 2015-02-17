@@ -103,6 +103,14 @@ boxCoords :: Box -> [Coord]
 boxCoords (Box r c) =
     range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
 
+-- | Returns a list of all groups of coordinates containing the target
+cellGroupCoords :: Coord -> [[Coord]]
+cellGroupCoords target =
+    [ rowCoords (row target)
+    , colCoords (col target)
+    , boxCoords (box target)
+    ]
+
 ----------------------------------------------------------------------
 
 type Value = Int
@@ -111,15 +119,6 @@ allValues :: Set Value
 allValues = Set.fromList [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 ----------------------------------------------------------------------
-
--- | Returns a list of all groups of coordinates containing the target
--- TODO better name
-cellGroups :: Coord -> [[Coord]]
-cellGroups target =
-    [ rowCoords (row target)
-    , colCoords (col target)
-    , boxCoords (box target)
-    ]
 
 -- | return all items in a list not equal to the first argument
 allBut :: (Eq a) => a -> [a] -> [a]
@@ -130,7 +129,7 @@ allBut target = filter (not . (==) target)
 -- TODO better name
 cellGroupsWithoutCell :: Coord -> [[Coord]]
 cellGroupsWithoutCell target =
-    map (allBut target) $ cellGroups target
+    map (allBut target) $ cellGroupCoords target
 
 -- TODO better name
 otherCellsInGroups :: Grid (Maybe Value) -> Coord -> [Set Value]
