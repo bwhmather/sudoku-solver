@@ -41,8 +41,6 @@ instance Ix Coord where
 
 ----------------------------------------------------------------------
 
-type Value = Int
-
 newtype Grid c = Grid (Array Coord c)
     deriving (Eq)
 
@@ -107,8 +105,12 @@ boxCoords (Box r c) =
 
 ----------------------------------------------------------------------
 
+type Value = Int
+
 allValues :: Set Value
 allValues = Set.fromList [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+----------------------------------------------------------------------
 
 -- | Returns a list of all groups of coordinates containing the target
 -- TODO better name
