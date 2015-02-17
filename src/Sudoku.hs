@@ -66,11 +66,11 @@ setCell (Grid a) coord value = Grid $ (Array.//) a [(coord, value)]
 ----------------------------------------------------------------------
 
 -- | Get the row of the cell at a coordinate
-row :: Coord -> Int
+row :: Coord -> Row
 row (Coord r _) = r
 
 -- | Get the column of the cell at a coordinate
-col :: Coord -> Int
+col :: Coord -> Col
 col (Coord _ c) = c
 
 -- | Get an tuple representing the row and column of the box containing the
