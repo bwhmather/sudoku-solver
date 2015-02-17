@@ -1,6 +1,6 @@
 module Sudoku where
 
-import Data.Maybe (isNothing, catMaybes)
+import Data.Maybe (isNothing, catMaybes, fromJust)
 
 import Data.List (sortBy, intercalate)
 
@@ -157,3 +157,9 @@ solve' grid = case candidates grid of
     (c, values) : _ ->
         concat . map (solve' . (setCell grid c) . Just) $ Set.toList values
     [] -> [grid]
+
+flattenSolved :: Grid (Maybe Value) -> Grid Value
+flattenSolved (Grid a) = Grid $ fmap fromJust a
+
+solve :: Grid (Maybe Value) -> [Grid Value]
+solve = (map flattenSolved) . solve'
