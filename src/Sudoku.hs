@@ -135,13 +135,10 @@ otherCellsInGroups :: Grid (Maybe Value) -> Coord -> [Set Value]
 otherCellsInGroups grid =
     map (Set.fromList . catMaybes . map (cell grid)) . cellGroupsWithoutCell
 
--- TODO might be better as union then difference
 -- TODO point free
 possibleValues :: Grid (Maybe Value) -> Coord -> Set Value
-possibleValues grid target
-    = (foldr Set.intersection Set.empty)
-    $ (map (Set.difference allValues))
-    $ otherCellsInGroups grid target
+possibleValues grid target =
+    Set.difference allValues $ Set.unions $ otherCellsInGroups grid target
 
 -- | List of the coordinates of all cells in a grid that have no value set
 unsetCells :: Grid (Maybe Value) -> [Coord]
