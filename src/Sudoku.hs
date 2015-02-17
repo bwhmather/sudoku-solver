@@ -2,7 +2,7 @@ module Sudoku where
 
 import Data.Maybe (isNothing, catMaybes)
 
-import Data.List (sortBy)
+import Data.List (sortBy, intercalate)
 
 import Data.Ix (Ix, range, index, inRange, rangeSize)
 import qualified Data.Array as Array
@@ -44,7 +44,15 @@ instance Ix Coord where
 type Value = Int
 
 newtype Grid c = Grid (Array Coord c)
-    deriving (Eq, Show)
+    deriving (Eq)
+
+instance (Show a) => Show (Grid a) where
+    show grid =
+        intercalate "\n" [ intercalate " " [ show $ cell grid (Coord r c)
+                                           | c <- [0 .. 8]
+                                           ]
+                         |  r <- [0 .. 8]
+                         ]
 
 size :: Int
 size = 3
@@ -96,7 +104,6 @@ colCoords c = range (Coord 0 c, Coord (size*size-1) c)
 boxCoords :: Box -> [Coord]
 boxCoords (Box r c) =
     range (Coord (size*r) (size*c), Coord (size*r+size-1) (size*c+size-1))
-
 
 ----------------------------------------------------------------------
 
