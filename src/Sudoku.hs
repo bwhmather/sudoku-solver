@@ -120,26 +120,24 @@ allValues = Set.fromList [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 ----------------------------------------------------------------------
 
--- | return all items in a list not equal to the first argument
-allBut :: (Eq a) => a -> [a] -> [a]
-allBut target = filter (not . (==) target)
+missingFromGroup :: Grid (Maybe Value) -> [Coord] -> Set Value
+missingFromGroup grid = (Set.difference allValues) . Set.fromList . catMaybes . (map (cell grid))
 
--- | A list of of all groups containing the target but filtered so that the
--- | target is not included
--- TODO better name
-cellGroupsWithoutCell :: Coord -> [[Coord]]
-cellGroupsWithoutCell target =
-    map (allBut target) $ cellGroupCoords target
+missingFromRow :: Grid (Maybe Value) -> Row -> Set Value
+missingFromRow grid = (missingFromGroup grid) . rowCoords
 
--- TODO better name
-otherCellsInGroups :: Grid (Maybe Value) -> Coord -> [Set Value]
-otherCellsInGroups grid =
-    map (Set.fromList . catMaybes . map (cell grid)) . cellGroupsWithoutCell
+missingFromCol :: Grid (Maybe Value) -> Col -> Set Value
+missingFromCol grid = (missingFromGroup grid) . colCoords
 
--- TODO point free
+missingFromBox :: Grid (Maybe Value) -> Box -> Set Value
+missingFromBox grid = (missingFromGroup grid) . boxCoords
+
+-- TODO handle targets that already have a value set
 possibleValues :: Grid (Maybe Value) -> Coord -> Set Value
 possibleValues grid target =
-    Set.difference allValues $ Set.unions $ otherCellsInGroups grid target
+    (missingFromRow grid $ row target) `Set.intersection`
+    (missingFromCol grid $ col target) `Set.intersection`
+    (missingFromBox grid $ box target)
 
 -- | List of the coordinates of all cells in a grid that have no value set
 unsetCells :: Grid (Maybe Value) -> [Coord]
