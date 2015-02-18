@@ -134,10 +134,9 @@ missingFromBox grid = (missingFromGroup grid) . boxCoords
 
 -- TODO handle targets that already have a value set
 possibleValues :: Grid (Maybe Value) -> Coord -> Set Value
-possibleValues grid target =
-    (missingFromRow grid $ row target) `Set.intersection`
-    (missingFromCol grid $ col target) `Set.intersection`
-    (missingFromBox grid $ box target)
+possibleValues grid target = (missingFromRow grid $ row target)
+          `Set.intersection` (missingFromCol grid $ col target)
+          `Set.intersection` (missingFromBox grid $ box target)
 
 -- | List of the coordinates of all cells in a grid that have no value set
 unsetCells :: Grid (Maybe Value) -> [Coord]
