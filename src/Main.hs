@@ -39,5 +39,5 @@ main :: IO ()
 main = do
   print $ arrayToGrid easy
   print $ possibleValues (arrayToGrid easy) (Coord 0 2)
-  print $ solve $ arrayToGrid easy
-  print $ solve $ arrayToGrid hard
+  mapM_ (putStrLn . prettyPrint) $ solve $ arrayToGrid easy
+  mapM_ (putStrLn . prettyPrint) $ solve $ arrayToGrid hard

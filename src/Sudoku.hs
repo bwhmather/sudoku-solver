@@ -160,3 +160,23 @@ flattenSolved (Grid a) = Grid $ fmap fromJust a
 
 solve :: Grid (Maybe Value) -> [Grid Value]
 solve = (map flattenSolved) . solve'
+
+----------------------------------------------------------------------
+
+prettyPrint :: Grid Value -> String
+prettyPrint (Grid a) = prettyPrintValues $ Array.elems a
+
+prettyPrintValues :: [Value] -> String
+prettyPrintValues values =
+    (foldr (++) "" [ (prettyPrintSeparator n) ++ (show v)
+                   | (n, v) <- zip [0..] values
+                   ])
+           ++ " |\n+-------+-------+-------+\n"
+
+prettyPrintSeparator :: Integer -> String
+prettyPrintSeparator n
+    | n          == 0 = "+-------+-------+-------+\n| "
+    | n `mod` 27 == 0 = " |\n+-------+-------+-------+\n| "
+    | n `mod` 9  == 0 = " |\n| "
+    | n `mod` 3  == 0 = " | "
+    | otherwise = " "
