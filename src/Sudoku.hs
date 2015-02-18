@@ -144,13 +144,13 @@ unsetCells grid = filter (isNothing . cell grid) cellCoords
 
 -- | mapping from unset cells to sets of possible values sorted in increasing
 -- | order by their number
-candidates :: Grid (Maybe Value) -> [(Coord, Set Value)]
-candidates grid =
+candidateCells :: Grid (Maybe Value) -> [(Coord, Set Value)]
+candidateCells grid =
     sortBy (\ (_, vs1) (_, vs2) -> compare (Set.size vs1) (Set.size vs2))
            [(coord, possibleValues grid coord) | coord <- unsetCells grid]
 
 solve' :: Grid (Maybe Value) -> [Grid (Maybe Value)]
-solve' grid = case candidates grid of
+solve' grid = case candidateCells grid of
     (c, values) : _ ->
         concat . map (solve' . (setCell grid c) . Just) $ Set.toList values
     [] -> [grid]
