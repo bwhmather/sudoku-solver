@@ -1,6 +1,8 @@
+import Data.Array (listArray)
+
 import Sudoku
 
-easy :: [Value]
+easy :: [Int]
 easy =
     [ 2, 6, 0, 0, 9, 0, 4, 0, 8
     , 9, 0, 0, 0, 0, 0, 0, 0, 0
@@ -13,7 +15,7 @@ easy =
     , 5, 7, 0, 0, 6, 0, 1, 0, 2
     ]
 
-hard :: [Value]
+hard :: [Int]
 hard =
     [ 0, 5, 0, 0, 0, 0, 0, 8, 0
     , 0, 1, 0, 3, 0, 0, 0, 0, 4
@@ -26,9 +28,18 @@ hard =
     , 0, 6, 0, 0, 0, 0, 0, 4, 0
     ]
 
+intCellToMaybe :: Int -> Maybe Value
+intCellToMaybe 0 = Nothing
+intCellToMaybe i = Just i
+
 arrayToGrid :: [Int] -> Grid (Maybe Value)
-arrayToGrid _ = empty
+arrayToGrid = Grid . (listArray bounds) . (map intCellToMaybe)
 
 main :: IO ()
 main = do
-  print $ solve' $ arrayToGrid easy
+  print $ arrayToGrid easy
+  print $ cellGroupsWithoutCell (Coord 0 0)
+  print $ otherCellsInGroups (arrayToGrid easy) (Coord 0 0)
+  print $ possibleValues (arrayToGrid easy) (Coord 0 2)
+  print $ solve $ arrayToGrid easy
+  print $ solve $ arrayToGrid hard
