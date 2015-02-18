@@ -38,8 +38,6 @@ arrayToGrid = Grid . (listArray bounds) . (map intCellToMaybe)
 main :: IO ()
 main = do
   print $ arrayToGrid easy
-  print $ cellGroupsWithoutCell (Coord 0 0)
-  print $ otherCellsInGroups (arrayToGrid easy) (Coord 0 0)
   print $ possibleValues (arrayToGrid easy) (Coord 0 2)
   print $ solve $ arrayToGrid easy
   print $ solve $ arrayToGrid hard
