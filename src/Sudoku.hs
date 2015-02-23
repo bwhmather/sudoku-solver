@@ -112,8 +112,11 @@ allValues = Set.fromList [1, 2, 3, 4, 5, 6, 7, 8, 9]
 
 ----------------------------------------------------------------------
 
+valuesInGroup :: Grid (Maybe Value) -> [Coord] -> Set Value
+valuesInGroup grid = Set.fromList . catMaybes . (map (cell grid))
+
 missingFromGroup :: Grid (Maybe Value) -> [Coord] -> Set Value
-missingFromGroup grid = (Set.difference allValues) . Set.fromList . catMaybes . (map (cell grid))
+missingFromGroup grid = (Set.difference allValues) . (valuesInGroup grid)
 
 missingFromRow :: Grid (Maybe Value) -> Row -> Set Value
 missingFromRow grid = (missingFromGroup grid) . rowCoords
