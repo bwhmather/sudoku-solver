@@ -44,14 +44,6 @@ instance Ix Coord where
 newtype Grid c = Grid (Array Coord c)
     deriving (Eq)
 
-instance (Show a) => Show (Grid a) where
-    show grid =
-        intercalate "\n" [ intercalate " " [ show $ cell grid (Coord r c)
-                                           | c <- [0 .. 8]
-                                           ]
-                         |  r <- [0 .. 8]
-                         ]
-
 size :: Int
 size = 3
 
