@@ -63,13 +63,16 @@ setCell :: Grid c -> Coord -> c -> Grid c
 setCell (Grid a) coord value = Grid $ (Array.//) a [(coord, value)]
 
 ----------------------------------------------------------------------
---
-instance Show (Grid Value) where
-    show (Grid a) = showValues $ Array.elems a
 
-showValues :: [Value] -> String
-showValues values =
-    (foldr (++) "" [ (showSeparator n) ++ (show v)
+instance Show (Grid Value) where
+    show (Grid a) = joinValues $ map show $ Array.elems a
+
+instance Show (Grid (Maybe Value)) where
+    show (Grid a) = joinValues $ map (maybe " " show) $ Array.elems a
+
+joinValues :: [String] -> String
+joinValues values =
+    (foldr (++) "" [ (showSeparator n) ++ v
                    | (n, v) <- zip [0..] values
                    ])
            ++ " |\n+-------+-------+-------+\n"
