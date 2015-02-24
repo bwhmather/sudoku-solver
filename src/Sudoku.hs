@@ -1,3 +1,4 @@
+{-# LANGUAGE FlexibleInstances #-}
 module Sudoku where
 
 import Data.Maybe (isNothing, catMaybes, fromJust)
@@ -60,6 +61,26 @@ cell (Grid a) = (!) a
 -- | Create a copy of a grid with one cell updated
 setCell :: Grid c -> Coord -> c -> Grid c
 setCell (Grid a) coord value = Grid $ (Array.//) a [(coord, value)]
+
+----------------------------------------------------------------------
+--
+instance Show (Grid Value) where
+    show (Grid a) = showValues $ Array.elems a
+
+showValues :: [Value] -> String
+showValues values =
+    (foldr (++) "" [ (showSeparator n) ++ (show v)
+                   | (n, v) <- zip [0..] values
+                   ])
+           ++ " |\n+-------+-------+-------+\n"
+
+showSeparator :: Integer -> String
+showSeparator n
+    | n          == 0 = "+-------+-------+-------+\n| "
+    | n `mod` 27 == 0 = " |\n+-------+-------+-------+\n| "
+    | n `mod` 9  == 0 = " |\n| "
+    | n `mod` 3  == 0 = " | "
+    | otherwise = " "
 
 ----------------------------------------------------------------------
 
@@ -158,20 +179,3 @@ solve = (map flattenSolved) . solve'
 
 ----------------------------------------------------------------------
 
-prettyPrint :: Grid Value -> String
-prettyPrint (Grid a) = prettyPrintValues $ Array.elems a
-
-prettyPrintValues :: [Value] -> String
-prettyPrintValues values =
-    (foldr (++) "" [ (prettyPrintSeparator n) ++ (show v)
-                   | (n, v) <- zip [0..] values
-                   ])
-           ++ " |\n+-------+-------+-------+\n"
-
-prettyPrintSeparator :: Integer -> String
-prettyPrintSeparator n
-    | n          == 0 = "+-------+-------+-------+\n| "
-    | n `mod` 27 == 0 = " |\n+-------+-------+-------+\n| "
-    | n `mod` 9  == 0 = " |\n| "
-    | n `mod` 3  == 0 = " | "
-    | otherwise = " "
