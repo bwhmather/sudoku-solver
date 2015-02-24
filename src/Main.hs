@@ -50,12 +50,12 @@ arrayToGrid = Grid . (listArray bounds) . (map intCellToMaybe)
 
 main :: IO ()
 main = do
-  print "Easy:"
+  putStrLn "Easy:"
   mapM_ print $ solve $ arrayToGrid easy
 
-  print "Medium:"
+  putStrLn "Medium:"
 
   mapM_ print $ solve $ arrayToGrid medium
 
-  print "Hard:"
+  putStrLn "Hard:"
   mapM_ print $ solve $ arrayToGrid hard
