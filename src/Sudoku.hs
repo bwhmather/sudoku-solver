@@ -179,6 +179,3 @@ flattenSolved (Grid a) = Grid $ fmap fromJust a
 
 solve :: Grid (Maybe Value) -> [Grid Value]
 solve = (map flattenSolved) . solve'
-
-----------------------------------------------------------------------
-
